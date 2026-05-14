@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eurotrip UCL 26 🍺</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d0d1a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #f5c518;
+      text-transform: uppercase;
+    }
+
+    header p {
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    .cards {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .card {
+      background: #1a1a2e;
+      border: 2px solid #2e2e50;
+      border-radius: 20px;
+      padding: 32px 28px;
+      flex: 1;
+      min-width: 260px;
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+
+    .card:hover { border-color: #f5c518; }
+
+    .card .avatar {
+      font-size: 3.5rem;
+      margin-bottom: 8px;
+    }
+
+    .card .name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+      color: #f5c518;
+    }
+
+    .counter-display {
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1.4rem;
+      font-weight: 700;
+      width: 56px;
+      height: 56px;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    button:active { transform: scale(0.92); }
+
+    .btn-add { background: #f5c518; color: #0d0d1a; }
+    .btn-add:hover { background: #ffd740; }
+
+    .btn-sub { background: #2e2e50; color: #fff; }
+    .btn-sub:hover { background: #3a3a6a; }
+
+    .btn-reset {
+      background: transparent;
+      border: 1px solid #444;
+      color: #666;
+      font-size: 0.7rem;
+      width: auto;
+      height: auto;
+      padding: 4px 10px;
+      border-radius: 8px;
+      margin-top: 16px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-reset:hover { color: #e74c3c; border-color: #e74c3c; }
+
+    .total-section {
+      margin-top: 36px;
+      background: #1a1a2e;
+      border: 2px solid #f5c518;
+      border-radius: 20px;
+      padding: 24px 48px;
+      text-align: center;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .total-label {
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: #aaa;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .total-number {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #f5c518;
+    }
+
+    .total-beers {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 6px;
+    }
+
+    .history {
+      margin-top: 28px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .history h2 {
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .log-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .log-list li {
+      background: #111122;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .log-list li span.who {
+      color: #f5c518;
+      font-weight: 600;
+    }
+
+    .clear-log {
+      display: block;
+      margin: 12px auto 0;
+      background: transparent;
+      border: none;
+      color: #444;
+      font-size: 0.75rem;
+      cursor: pointer;
+      text-decoration: underline;
+      width: auto;
+      height: auto;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    .clear-log:hover { color: #e74c3c; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🍺 Eurotrip UCL 26</h1>
+    <p>Beer Counter — Juanpa vs Mario</p>
+  </header>
+
+  <div class="cards">
+    <div class="card" id="card-juanpa">
+      <div class="avatar">🧔</div>
+      <div class="name">Juanpa</div>
+      <div class="counter-display" id="count-juanpa">0</div>
+      <div class="btn-row">
+        <button class="btn-sub" onclick="change('juanpa', -1)">−</button>
+        <button class="btn-add" onclick="change('juanpa', 1)">🍺</button>
+      </div>
+      <button class="btn-reset" onclick="reset('juanpa')">reset</button>
+    </div>
+
+    <div class="card" id="card-mario">
+      <div class="avatar">🧑</div>
+      <div class="name">Mario</div>
+      <div class="counter-display" id="count-mario">0</div>
+      <div class="btn-row">
+        <button class="btn-sub" onclick="change('mario', -1)">−</button>
+        <button class="btn-add" onclick="change('mario', 1)">🍺</button>
+      </div>
+      <button class="btn-reset" onclick="reset('mario')">reset</button>
+    </div>
+  </div>
+
+  <div class="total-section">
+    <div class="total-label">Total Eurotrip</div>
+    <div class="total-number" id="total">0</div>
+    <div class="total-beers">cervezas entre los dos</div>
+  </div>
+
+  <div class="history">
+    <h2>Historial</h2>
+    <ul class="log-list" id="log-list"></ul>
+    <button class="clear-log" onclick="clearLog()">borrar historial</button>
+  </div>
+
+  <script>
+    const DB_KEY = 'eurotrip_ucl26';
+    const LOG_KEY = 'eurotrip_ucl26_log';
+
+    function loadDB() {
+      const raw = localStorage.getItem(DB_KEY);
+      return raw ? JSON.parse(raw) : { juanpa: 0, mario: 0 };
+    }
+
+    function saveDB(db) {
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+    }
+
+    function loadLog() {
+      const raw = localStorage.getItem(LOG_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }
+
+    function saveLog(log) {
+      localStorage.setItem(LOG_KEY, JSON.stringify(log));
+    }
+
+    function render() {
+      const db = loadDB();
+      document.getElementById('count-juanpa').textContent = db.juanpa;
+      document.getElementById('count-mario').textContent = db.mario;
+      document.getElementById('total').textContent = db.juanpa + db.mario;
+      renderLog();
+    }
+
+    function renderLog() {
+      const log = loadLog();
+      const el = document.getElementById('log-list');
+      el.innerHTML = '';
+      [...log].reverse().forEach(entry => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="who">${capitalize(entry.who)}</span> <span>${entry.action} — ${entry.time}</span>`;
+        el.appendChild(li);
+      });
+    }
+
+    function change(who, delta) {
+      const db = loadDB();
+      db[who] = Math.max(0, db[who] + delta);
+      saveDB(db);
+
+      const log = loadLog();
+      log.push({
+        who,
+        action: delta > 0 ? '+1 cerveza 🍺' : '-1 cerveza',
+        time: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })
+      });
+      if (log.length > 100) log.shift();
+      saveLog(log);
+
+      render();
+    }
+
+    function reset(who) {
+      if (!confirm(`¿Resetear el contador de ${capitalize(who)}?`)) return;
+      const db = loadDB();
+      db[who] = 0;
+      saveDB(db);
+      render();
+    }
+
+    function clearLog() {
+      if (!confirm('¿Borrar todo el historial?')) return;
+      localStorage.removeItem(LOG_KEY);
+      render();
+    }
+
+    function capitalize(s) {
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    render();
+  </script>
+</body>
+</html>
