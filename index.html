@@ -19,238 +19,107 @@
       padding: 24px 16px;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
+    header { text-align: center; margin-bottom: 32px; }
     header h1 {
-      font-size: 2rem;
-      font-weight: 900;
-      letter-spacing: 2px;
-      color: #f5c518;
-      text-transform: uppercase;
+      font-size: 2rem; font-weight: 900;
+      letter-spacing: 2px; color: #f5c518; text-transform: uppercase;
     }
-
-    header p {
-      color: #aaa;
-      font-size: 0.9rem;
-      margin-top: 4px;
-      letter-spacing: 1px;
-    }
+    header p { color: #aaa; font-size: 0.9rem; margin-top: 4px; letter-spacing: 1px; }
 
     .cards {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
-      max-width: 700px;
+      display: flex; gap: 24px; flex-wrap: wrap;
+      justify-content: center; width: 100%; max-width: 700px;
     }
 
     .card {
-      background: #1a1a2e;
-      border: 2px solid #2e2e50;
-      border-radius: 20px;
-      padding: 32px 28px;
-      flex: 1;
-      min-width: 260px;
-      text-align: center;
+      background: #1a1a2e; border: 2px solid #2e2e50;
+      border-radius: 20px; padding: 32px 28px;
+      flex: 1; min-width: 260px; text-align: center;
       transition: border-color 0.3s;
     }
-
     .card:hover { border-color: #f5c518; }
 
-    .card .avatar {
-      margin-bottom: 8px;
-    }
-
+    .card .avatar { margin-bottom: 8px; }
     .card .avatar img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #2e2e50;
-      background: #2e2e50;
+      width: 80px; height: 80px; border-radius: 50%;
+      object-fit: cover; border: 3px solid #2e2e50; background: #2e2e50;
     }
 
     .card .name {
-      font-size: 1.5rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 24px;
-      color: #f5c518;
+      font-size: 1.5rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 24px; color: #f5c518;
     }
 
     .counter-display {
-      font-size: 5rem;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 24px;
-      color: #fff;
+      font-size: 5rem; font-weight: 900; line-height: 1;
+      margin-bottom: 24px; color: #fff;
     }
 
-    .btn-row {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
+    .btn-row { display: flex; gap: 12px; justify-content: center; }
 
     button {
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1.4rem;
-      font-weight: 700;
-      width: 56px;
-      height: 56px;
+      border: none; border-radius: 12px; cursor: pointer;
+      font-size: 1.4rem; font-weight: 700; width: 56px; height: 56px;
       transition: transform 0.1s, opacity 0.2s;
     }
-
     button:active { transform: scale(0.92); }
 
     .btn-add { background: #f5c518; color: #0d0d1a; }
     .btn-add:hover { background: #ffd740; }
-
     .btn-sub { background: #2e2e50; color: #fff; }
     .btn-sub:hover { background: #3a3a6a; }
 
     .btn-reset {
-      background: transparent;
-      border: 1px solid #444;
-      color: #666;
-      font-size: 0.7rem;
-      width: auto;
-      height: auto;
-      padding: 4px 10px;
-      border-radius: 8px;
-      margin-top: 16px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      background: transparent; border: 1px solid #444; color: #666;
+      font-size: 0.7rem; width: auto; height: auto; padding: 4px 10px;
+      border-radius: 8px; margin-top: 16px;
+      display: block; margin-left: auto; margin-right: auto;
     }
-
     .btn-reset:hover { color: #e74c3c; border-color: #e74c3c; }
 
     .total-section {
-      margin-top: 36px;
-      background: #1a1a2e;
-      border: 2px solid #f5c518;
-      border-radius: 20px;
-      padding: 24px 48px;
-      text-align: center;
-      width: 100%;
-      max-width: 700px;
+      margin-top: 36px; background: #1a1a2e; border: 2px solid #f5c518;
+      border-radius: 20px; padding: 24px 48px; text-align: center;
+      width: 100%; max-width: 700px;
     }
+    .total-label { font-size: 0.85rem; letter-spacing: 2px; color: #aaa; text-transform: uppercase; margin-bottom: 8px; }
+    .total-number { font-size: 3.5rem; font-weight: 900; color: #f5c518; }
+    .total-beers { font-size: 0.9rem; color: #666; margin-top: 6px; }
 
-    .total-label {
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      color: #aaa;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .total-number {
-      font-size: 3.5rem;
-      font-weight: 900;
-      color: #f5c518;
-    }
-
-    .total-beers {
-      font-size: 0.9rem;
-      color: #666;
-      margin-top: 6px;
-    }
-
-    /* Daily chart */
     .chart-section {
-      margin-top: 28px;
-      width: 100%;
-      max-width: 700px;
-      background: #1a1a2e;
-      border: 2px solid #2e2e50;
-      border-radius: 20px;
-      padding: 24px 20px;
+      margin-top: 28px; width: 100%; max-width: 700px;
+      background: #1a1a2e; border: 2px solid #2e2e50;
+      border-radius: 20px; padding: 24px 20px;
     }
-
     .chart-section h2 {
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      color: #aaa;
-      text-transform: uppercase;
-      margin-bottom: 18px;
-      text-align: center;
+      font-size: 0.85rem; letter-spacing: 2px; color: #aaa;
+      text-transform: uppercase; margin-bottom: 18px; text-align: center;
     }
+    .chart-container { position: relative; height: 240px; }
+    .chart-empty { text-align: center; color: #444; font-size: 0.85rem; padding: 80px 0; }
 
-    .chart-container {
-      position: relative;
-      height: 220px;
-    }
-
-    .chart-empty {
-      text-align: center;
-      color: #444;
-      font-size: 0.85rem;
-      padding: 60px 0;
-    }
-
-    /* Log */
-    .history {
-      margin-top: 28px;
-      width: 100%;
-      max-width: 700px;
-    }
-
+    .history { margin-top: 28px; width: 100%; max-width: 700px; }
     .history h2 {
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      color: #555;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      text-align: center;
+      font-size: 0.85rem; letter-spacing: 2px; color: #555;
+      text-transform: uppercase; margin-bottom: 12px; text-align: center;
     }
 
     .log-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      max-height: 220px;
-      overflow-y: auto;
+      list-style: none; display: flex; flex-direction: column;
+      gap: 6px; max-height: 220px; overflow-y: auto;
     }
-
     .log-list li {
-      background: #111122;
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 0.82rem;
-      color: #888;
-      display: flex;
-      justify-content: space-between;
+      background: #111122; border-radius: 8px; padding: 8px 14px;
+      font-size: 0.82rem; color: #888; display: flex; justify-content: space-between;
     }
-
-    .log-list li span.who {
-      color: #f5c518;
-      font-weight: 600;
-    }
+    .log-list li span.who { color: #f5c518; font-weight: 600; }
 
     .clear-log {
-      display: block;
-      margin: 12px auto 0;
-      background: transparent;
-      border: none;
-      color: #444;
-      font-size: 0.75rem;
-      cursor: pointer;
-      text-decoration: underline;
-      width: auto;
-      height: auto;
-      padding: 0;
-      border-radius: 0;
+      display: block; margin: 12px auto 0; background: transparent;
+      border: none; color: #444; font-size: 0.75rem; cursor: pointer;
+      text-decoration: underline; width: auto; height: auto;
+      padding: 0; border-radius: 0;
     }
-
     .clear-log:hover { color: #e74c3c; }
   </style>
 </head>
@@ -314,38 +183,78 @@
     const LOG_KEY = 'eurotrip_ucl26_log';
 
     let chartInstance = null;
+    let imgJuanpa = null;
+    let imgMario  = null;
 
-    function loadDB() {
-      const raw = localStorage.getItem(DB_KEY);
-      return raw ? JSON.parse(raw) : { juanpa: 0, mario: 0 };
-    }
+    // ── Storage ──────────────────────────────────────────────
+    function loadDB()      { const r = localStorage.getItem(DB_KEY);  return r ? JSON.parse(r) : { juanpa: 0, mario: 0 }; }
+    function saveDB(db)    { localStorage.setItem(DB_KEY,  JSON.stringify(db)); }
+    function loadLog()     { const r = localStorage.getItem(LOG_KEY); return r ? JSON.parse(r) : []; }
+    function saveLog(log)  { localStorage.setItem(LOG_KEY, JSON.stringify(log)); }
 
-    function saveDB(db) {
-      localStorage.setItem(DB_KEY, JSON.stringify(db));
-    }
+    function todayISO() { return new Date().toISOString().split('T')[0]; }
+    function formatDay(iso) { const [,m,d] = iso.split('-'); return `${d}/${m}`; }
+    function capitalize(s)  { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-    function loadLog() {
-      const raw = localStorage.getItem(LOG_KEY);
-      return raw ? JSON.parse(raw) : [];
-    }
-
-    function saveLog(log) {
-      localStorage.setItem(LOG_KEY, JSON.stringify(log));
-    }
-
-    function todayISO() {
-      return new Date().toISOString().split('T')[0];
-    }
-
-    function formatDay(iso) {
-      const [y, m, d] = iso.split('-');
-      return `${d}/${m}`;
-    }
-
-    function getDailyData() {
+    // ── Seed data: 13-05 each drank 3 ────────────────────────
+    function initSeedData() {
       const log = loadLog();
+      if (log.some(e => e.date === '2026-05-13')) return;
+
+      const seed = [];
+      for (let i = 0; i < 3; i++) {
+        seed.push({ who: 'juanpa', delta: 1, date: '2026-05-13', time: '20:00' });
+        seed.push({ who: 'mario',  delta: 1, date: '2026-05-13', time: '20:00' });
+      }
+      saveLog([...seed, ...log]);
+
+      const db = loadDB();
+      if (db.juanpa === 0 && db.mario === 0) saveDB({ juanpa: 3, mario: 3 });
+    }
+
+    // ── Image preload — re-renders chart when ready ───────────
+    function preloadImages() {
+      imgJuanpa = new Image();
+      imgJuanpa.onload = () => renderChart();
+      imgJuanpa.src = 'juanpa.jpg';
+
+      imgMario = new Image();
+      imgMario.onload = () => renderChart();
+      imgMario.src = 'mario.jpg';
+    }
+
+    function isLoaded(img) {
+      return img && img.complete && img.naturalWidth > 0;
+    }
+
+    // Draws image clipped to a circle inside a canvas.
+    // Chart.js uses drawImage(canvas, x-r, y-r, 2r, 2r) so any canvas size works.
+    function makeCircleCanvas(imgEl, borderColor) {
+      const S = 120, B = 6;
+      const c = document.createElement('canvas');
+      c.width = S; c.height = S;
+      const ctx = c.getContext('2d');
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(S/2, S/2, S/2 - B, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.drawImage(imgEl, 0, 0, S, S);
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.arc(S/2, S/2, S/2 - B/2, 0, Math.PI * 2);
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = B;
+      ctx.stroke();
+
+      return c;
+    }
+
+    // ── Daily aggregation ─────────────────────────────────────
+    function getDailyData() {
       const days = {};
-      log.forEach(entry => {
+      loadLog().forEach(entry => {
         const date = entry.date || todayISO();
         if (!days[date]) days[date] = { juanpa: 0, mario: 0 };
         if (entry.delta > 0) days[date][entry.who] += entry.delta;
@@ -353,83 +262,97 @@
       return days;
     }
 
+    // ── Chart ─────────────────────────────────────────────────
+    const PHOTO_RADIUS = 22; // px on chart canvas
+
     function renderChart() {
-      const days = getDailyData();
+      const days   = getDailyData();
       const labels = Object.keys(days).sort();
 
-      const emptyMsg = document.getElementById('chart-empty');
+      const emptyMsg  = document.getElementById('chart-empty');
       const container = document.getElementById('chart-container');
 
       if (labels.length === 0) {
         container.style.display = 'none';
-        emptyMsg.style.display = 'block';
+        emptyMsg.style.display  = 'block';
         return;
       }
 
       container.style.display = 'block';
-      emptyMsg.style.display = 'none';
+      emptyMsg.style.display  = 'none';
 
-      const juanpaData = labels.map(d => days[d].juanpa);
-      const marioData  = labels.map(d => days[d].mario);
+      const last = labels.length - 1;
+
+      const ptJ = isLoaded(imgJuanpa) ? makeCircleCanvas(imgJuanpa, '#f5c518') : null;
+      const ptM = isLoaded(imgMario)  ? makeCircleCanvas(imgMario,  '#4e9af1') : null;
+
+      const styleJ  = i => (i === last && ptJ) ? ptJ      : 'circle';
+      const styleM  = i => (i === last && ptM) ? ptM      : 'circle';
+      const radiusJ = i => (i === last && ptJ) ? PHOTO_RADIUS : 5;
+      const radiusM = i => (i === last && ptM) ? PHOTO_RADIUS : 5;
 
       if (chartInstance) chartInstance.destroy();
 
-      const ctx = document.getElementById('daily-chart').getContext('2d');
-      chartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels.map(formatDay),
-          datasets: [
-            {
-              label: 'Juanpa',
-              data: juanpaData,
-              backgroundColor: '#f5c518cc',
-              borderColor: '#f5c518',
-              borderWidth: 1,
-              borderRadius: 6,
-            },
-            {
-              label: 'Mario',
-              data: marioData,
-              backgroundColor: '#4e9af1cc',
-              borderColor: '#4e9af1',
-              borderWidth: 1,
-              borderRadius: 6,
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              labels: { color: '#aaa', font: { size: 12 } }
-            },
-            tooltip: {
-              callbacks: {
-                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} 🍺`
-              }
-            }
-          },
-          scales: {
-            x: {
-              ticks: { color: '#888' },
-              grid: { color: '#1e1e3a' }
-            },
-            y: {
-              beginAtZero: true,
-              ticks: {
-                color: '#888',
-                stepSize: 1,
-                precision: 0
+      chartInstance = new Chart(
+        document.getElementById('daily-chart').getContext('2d'),
+        {
+          type: 'line',
+          data: {
+            labels: labels.map(formatDay),
+            datasets: [
+              {
+                label: 'Juanpa',
+                data: labels.map(d => days[d].juanpa),
+                borderColor: '#f5c518',
+                backgroundColor: 'rgba(245,197,24,0.10)',
+                fill: true,
+                tension: 0.35,
+                pointStyle:       labels.map((_, i) => styleJ(i)),
+                pointRadius:      labels.map((_, i) => radiusJ(i)),
+                pointHoverRadius: labels.map((_, i) => radiusJ(i) + 2),
+                pointBackgroundColor: '#f5c518',
+                pointBorderColor:     '#0d0d1a',
+                pointBorderWidth: 2,
               },
-              grid: { color: '#1e1e3a' }
+              {
+                label: 'Mario',
+                data: labels.map(d => days[d].mario),
+                borderColor: '#4e9af1',
+                backgroundColor: 'rgba(78,154,241,0.10)',
+                fill: true,
+                tension: 0.35,
+                pointStyle:       labels.map((_, i) => styleM(i)),
+                pointRadius:      labels.map((_, i) => radiusM(i)),
+                pointHoverRadius: labels.map((_, i) => radiusM(i) + 2),
+                pointBackgroundColor: '#4e9af1',
+                pointBorderColor:     '#0d0d1a',
+                pointBorderWidth: 2,
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { labels: { color: '#aaa', font: { size: 12 } } },
+              tooltip: {
+                callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y} 🍺` }
+              }
+            },
+            scales: {
+              x: { ticks: { color: '#888' }, grid: { color: '#1e1e3a' } },
+              y: {
+                beginAtZero: true,
+                ticks: { color: '#888', stepSize: 1, precision: 0 },
+                grid: { color: '#1e1e3a' }
+              }
             }
           }
         }
-      });
+      );
     }
 
+    // ── Render ────────────────────────────────────────────────
     function render() {
       const db = loadDB();
       document.getElementById('count-juanpa').textContent = db.juanpa;
@@ -441,13 +364,13 @@
 
     function renderLog() {
       const log = loadLog();
-      const el = document.getElementById('log-list');
+      const el  = document.getElementById('log-list');
       el.innerHTML = '';
       [...log].reverse().forEach(entry => {
-        const li = document.createElement('li');
+        const li    = document.createElement('li');
         const label = entry.delta > 0 ? '+1 cerveza 🍺' : '-1 cerveza';
-        const dateStr = entry.date ? `${formatDay(entry.date)} ` : '';
-        li.innerHTML = `<span class="who">${capitalize(entry.who)}</span> <span>${label} — ${dateStr}${entry.time}</span>`;
+        const date  = entry.date ? `${formatDay(entry.date)} ` : '';
+        li.innerHTML = `<span class="who">${capitalize(entry.who)}</span><span>${label} — ${date}${entry.time}</span>`;
         el.appendChild(li);
       });
     }
@@ -459,14 +382,12 @@
 
       const log = loadLog();
       log.push({
-        who,
-        delta,
+        who, delta,
         date: todayISO(),
         time: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })
       });
-      if (log.length > 200) log.shift();
+      if (log.length > 300) log.shift();
       saveLog(log);
-
       render();
     }
 
@@ -484,10 +405,9 @@
       render();
     }
 
-    function capitalize(s) {
-      return s.charAt(0).toUpperCase() + s.slice(1);
-    }
-
+    // ── Boot ──────────────────────────────────────────────────
+    initSeedData();
+    preloadImages();
     render();
   </script>
 </body>
