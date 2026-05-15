@@ -234,7 +234,7 @@
     }
 
     function makeBeerCanvas() {
-      const S = 26;
+      const S = 18;
       const c = document.createElement('canvas');
       c.width = S; c.height = S;
       const ctx = c.getContext('2d');
@@ -258,7 +258,7 @@
       const beer = makeBeerCanvas();
 
       const ptStyle  = i => i === last ? beer : 'circle';
-      const ptRadius = i => i === last ? 13 : (i < last ? 3 : 0);
+      const ptRadius = i => i === last ? 9 : (i < last ? 3 : 0);
 
       // cumulative totals; null for future dates
       let sumJ = 0, sumM = 0;
@@ -336,7 +336,8 @@
               },
               y: {
                 beginAtZero: true,
-                ticks: { color: '#888', stepSize: 1, precision: 0 },
+                max: 100,
+                ticks: { color: '#888', stepSize: 10, precision: 0 },
                 grid: { color: '#1e1e3a' }
               }
             }
