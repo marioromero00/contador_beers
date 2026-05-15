@@ -95,7 +95,7 @@
       font-size: 0.85rem; letter-spacing: 2px; color: #aaa;
       text-transform: uppercase; margin-bottom: 18px; text-align: center;
     }
-    .chart-container { position: relative; height: 240px; }
+    .chart-container { position: relative; height: 280px; }
     .chart-empty { text-align: center; color: #444; font-size: 0.85rem; padding: 80px 0; }
 
     .history { margin-top: 28px; width: 100%; max-width: 700px; }
@@ -263,33 +263,40 @@
     }
 
     // ── Chart ─────────────────────────────────────────────────
-    const PHOTO_RADIUS = 22; // px on chart canvas
+    const PHOTO_RADIUS = 22;
+
+    function getDateRange() {
+      const dates = [];
+      const cur   = new Date('2026-05-13');
+      const end   = new Date('2026-06-01');
+      while (cur <= end) {
+        dates.push(cur.toISOString().split('T')[0]);
+        cur.setDate(cur.getDate() + 1);
+      }
+      return dates;
+    }
 
     function renderChart() {
-      const days   = getDailyData();
-      const labels = Object.keys(days).sort();
+      const allDates = getDateRange();
+      const today    = todayISO();
+      const dayData  = getDailyData();
 
-      const emptyMsg  = document.getElementById('chart-empty');
-      const container = document.getElementById('chart-container');
+      document.getElementById('chart-container').style.display = 'block';
+      document.getElementById('chart-empty').style.display     = 'none';
 
-      if (labels.length === 0) {
-        container.style.display = 'none';
-        emptyMsg.style.display  = 'block';
-        return;
-      }
-
-      container.style.display = 'block';
-      emptyMsg.style.display  = 'none';
-
-      const last = labels.length - 1;
+      // last index that has passed (photo goes here)
+      const last = allDates.reduce((acc, d, i) => d <= today ? i : acc, 0);
 
       const ptJ = isLoaded(imgJuanpa) ? makeCircleCanvas(imgJuanpa, '#f5c518') : null;
       const ptM = isLoaded(imgMario)  ? makeCircleCanvas(imgMario,  '#4e9af1') : null;
 
-      const styleJ  = i => (i === last && ptJ) ? ptJ      : 'circle';
-      const styleM  = i => (i === last && ptM) ? ptM      : 'circle';
-      const radiusJ = i => (i === last && ptJ) ? PHOTO_RADIUS : 5;
-      const radiusM = i => (i === last && ptM) ? PHOTO_RADIUS : 5;
+      const styleJ  = i => (i === last && ptJ) ? ptJ : 'circle';
+      const styleM  = i => (i === last && ptM) ? ptM : 'circle';
+      const radiusJ = i => (i === last && ptJ) ? PHOTO_RADIUS : (i <= last ? 4 : 0);
+      const radiusM = i => (i === last && ptM) ? PHOTO_RADIUS : (i <= last ? 4 : 0);
+
+      const juanpaData = allDates.map(d => d > today ? null : (dayData[d]?.juanpa ?? 0));
+      const marioData  = allDates.map(d => d > today ? null : (dayData[d]?.mario  ?? 0));
 
       if (chartInstance) chartInstance.destroy();
 
@@ -298,32 +305,34 @@
         {
           type: 'line',
           data: {
-            labels: labels.map(formatDay),
+            labels: allDates.map(formatDay),
             datasets: [
               {
                 label: 'Juanpa',
-                data: labels.map(d => days[d].juanpa),
+                data: juanpaData,
+                spanGaps: false,
                 borderColor: '#f5c518',
                 backgroundColor: 'rgba(245,197,24,0.10)',
                 fill: true,
                 tension: 0.35,
-                pointStyle:       labels.map((_, i) => styleJ(i)),
-                pointRadius:      labels.map((_, i) => radiusJ(i)),
-                pointHoverRadius: labels.map((_, i) => radiusJ(i) + 2),
+                pointStyle:       allDates.map((_, i) => styleJ(i)),
+                pointRadius:      allDates.map((_, i) => radiusJ(i)),
+                pointHoverRadius: allDates.map((_, i) => Math.max(radiusJ(i), 6)),
                 pointBackgroundColor: '#f5c518',
                 pointBorderColor:     '#0d0d1a',
                 pointBorderWidth: 2,
               },
               {
                 label: 'Mario',
-                data: labels.map(d => days[d].mario),
+                data: marioData,
+                spanGaps: false,
                 borderColor: '#4e9af1',
                 backgroundColor: 'rgba(78,154,241,0.10)',
                 fill: true,
                 tension: 0.35,
-                pointStyle:       labels.map((_, i) => styleM(i)),
-                pointRadius:      labels.map((_, i) => radiusM(i)),
-                pointHoverRadius: labels.map((_, i) => radiusM(i) + 2),
+                pointStyle:       allDates.map((_, i) => styleM(i)),
+                pointRadius:      allDates.map((_, i) => radiusM(i)),
+                pointHoverRadius: allDates.map((_, i) => Math.max(radiusM(i), 6)),
                 pointBackgroundColor: '#4e9af1',
                 pointBorderColor:     '#0d0d1a',
                 pointBorderWidth: 2,
@@ -336,11 +345,20 @@
             plugins: {
               legend: { labels: { color: '#aaa', font: { size: 12 } } },
               tooltip: {
-                callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y} 🍺` }
+                callbacks: { label: c => c.parsed.y !== null ? ` ${c.dataset.label}: ${c.parsed.y} 🍺` : '' }
               }
             },
             scales: {
-              x: { ticks: { color: '#888' }, grid: { color: '#1e1e3a' } },
+              x: {
+                ticks: {
+                  color: '#888',
+                  font: { size: 10 },
+                  maxRotation: 45,
+                  minRotation: 45,
+                  autoSkip: false,
+                },
+                grid: { color: '#1e1e3a' }
+              },
               y: {
                 beginAtZero: true,
                 ticks: { color: '#888', stepSize: 1, precision: 0 },
