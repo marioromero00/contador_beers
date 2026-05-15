@@ -183,8 +183,6 @@
     const LOG_KEY = 'eurotrip_ucl26_log';
 
     let chartInstance = null;
-    let imgJuanpa = null;
-    let imgMario  = null;
 
     // ── Storage ──────────────────────────────────────────────
     function loadDB()      { const r = localStorage.getItem(DB_KEY);  return r ? JSON.parse(r) : { juanpa: 0, mario: 0 }; }
@@ -212,45 +210,6 @@
       if (db.juanpa === 0 && db.mario === 0) saveDB({ juanpa: 3, mario: 3 });
     }
 
-    // ── Image preload — re-renders chart when ready ───────────
-    function preloadImages() {
-      imgJuanpa = new Image();
-      imgJuanpa.onload = () => renderChart();
-      imgJuanpa.src = 'juanpa.jpg';
-
-      imgMario = new Image();
-      imgMario.onload = () => renderChart();
-      imgMario.src = 'mario.jpg';
-    }
-
-    function isLoaded(img) {
-      return img && img.complete && img.naturalWidth > 0;
-    }
-
-    // Draws image clipped to a circle inside a canvas.
-    // Chart.js uses drawImage(canvas, x-r, y-r, 2r, 2r) so any canvas size works.
-    function makeCircleCanvas(imgEl, borderColor) {
-      const S = 120, B = 6;
-      const c = document.createElement('canvas');
-      c.width = S; c.height = S;
-      const ctx = c.getContext('2d');
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(S/2, S/2, S/2 - B, 0, Math.PI * 2);
-      ctx.clip();
-      ctx.drawImage(imgEl, 0, 0, S, S);
-      ctx.restore();
-
-      ctx.beginPath();
-      ctx.arc(S/2, S/2, S/2 - B/2, 0, Math.PI * 2);
-      ctx.strokeStyle = borderColor;
-      ctx.lineWidth = B;
-      ctx.stroke();
-
-      return c;
-    }
-
     // ── Daily aggregation ─────────────────────────────────────
     function getDailyData() {
       const days = {};
@@ -263,17 +222,27 @@
     }
 
     // ── Chart ─────────────────────────────────────────────────
-    const PHOTO_RADIUS = 22;
-
     function getDateRange() {
       const dates = [];
-      const cur   = new Date('2026-05-13');
-      const end   = new Date('2026-06-01');
+      const cur = new Date('2026-05-13');
+      const end = new Date('2026-06-01');
       while (cur <= end) {
         dates.push(cur.toISOString().split('T')[0]);
         cur.setDate(cur.getDate() + 1);
       }
       return dates;
+    }
+
+    function makeBeerCanvas() {
+      const S = 26;
+      const c = document.createElement('canvas');
+      c.width = S; c.height = S;
+      const ctx = c.getContext('2d');
+      ctx.font = `${S - 2}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🍺', S / 2, S / 2 + 1);
+      return c;
     }
 
     function renderChart() {
@@ -284,19 +253,25 @@
       document.getElementById('chart-container').style.display = 'block';
       document.getElementById('chart-empty').style.display     = 'none';
 
-      // last index that has passed (photo goes here)
+      // last index with passed date — beer emoji goes here
       const last = allDates.reduce((acc, d, i) => d <= today ? i : acc, 0);
+      const beer = makeBeerCanvas();
 
-      const ptJ = isLoaded(imgJuanpa) ? makeCircleCanvas(imgJuanpa, '#f5c518') : null;
-      const ptM = isLoaded(imgMario)  ? makeCircleCanvas(imgMario,  '#4e9af1') : null;
+      const ptStyle  = i => i === last ? beer : 'circle';
+      const ptRadius = i => i === last ? 13 : (i < last ? 3 : 0);
 
-      const styleJ  = i => (i === last && ptJ) ? ptJ : 'circle';
-      const styleM  = i => (i === last && ptM) ? ptM : 'circle';
-      const radiusJ = i => (i === last && ptJ) ? PHOTO_RADIUS : (i <= last ? 4 : 0);
-      const radiusM = i => (i === last && ptM) ? PHOTO_RADIUS : (i <= last ? 4 : 0);
-
-      const juanpaData = allDates.map(d => d > today ? null : (dayData[d]?.juanpa ?? 0));
-      const marioData  = allDates.map(d => d > today ? null : (dayData[d]?.mario  ?? 0));
+      // cumulative totals; null for future dates
+      let sumJ = 0, sumM = 0;
+      const juanpaData = allDates.map(d => {
+        if (d > today) return null;
+        sumJ += dayData[d]?.juanpa ?? 0;
+        return sumJ;
+      });
+      const marioData = allDates.map(d => {
+        if (d > today) return null;
+        sumM += dayData[d]?.mario ?? 0;
+        return sumM;
+      });
 
       if (chartInstance) chartInstance.destroy();
 
@@ -312,14 +287,14 @@
                 data: juanpaData,
                 spanGaps: false,
                 borderColor: '#f5c518',
-                backgroundColor: 'rgba(245,197,24,0.10)',
+                backgroundColor: 'rgba(245,197,24,0.12)',
                 fill: true,
                 tension: 0.35,
-                pointStyle:       allDates.map((_, i) => styleJ(i)),
-                pointRadius:      allDates.map((_, i) => radiusJ(i)),
-                pointHoverRadius: allDates.map((_, i) => Math.max(radiusJ(i), 6)),
+                pointStyle:          allDates.map((_, i) => ptStyle(i)),
+                pointRadius:         allDates.map((_, i) => ptRadius(i)),
+                pointHoverRadius:    allDates.map((_, i) => ptRadius(i) + 2),
                 pointBackgroundColor: '#f5c518',
-                pointBorderColor:     '#0d0d1a',
+                pointBorderColor:    '#0d0d1a',
                 pointBorderWidth: 2,
               },
               {
@@ -327,14 +302,14 @@
                 data: marioData,
                 spanGaps: false,
                 borderColor: '#4e9af1',
-                backgroundColor: 'rgba(78,154,241,0.10)',
+                backgroundColor: 'rgba(78,154,241,0.12)',
                 fill: true,
                 tension: 0.35,
-                pointStyle:       allDates.map((_, i) => styleM(i)),
-                pointRadius:      allDates.map((_, i) => radiusM(i)),
-                pointHoverRadius: allDates.map((_, i) => Math.max(radiusM(i), 6)),
+                pointStyle:          allDates.map((_, i) => ptStyle(i)),
+                pointRadius:         allDates.map((_, i) => ptRadius(i)),
+                pointHoverRadius:    allDates.map((_, i) => ptRadius(i) + 2),
                 pointBackgroundColor: '#4e9af1',
-                pointBorderColor:     '#0d0d1a',
+                pointBorderColor:    '#0d0d1a',
                 pointBorderWidth: 2,
               }
             ]
@@ -345,7 +320,7 @@
             plugins: {
               legend: { labels: { color: '#aaa', font: { size: 12 } } },
               tooltip: {
-                callbacks: { label: c => c.parsed.y !== null ? ` ${c.dataset.label}: ${c.parsed.y} 🍺` : '' }
+                callbacks: { label: c => c.parsed.y !== null ? ` ${c.dataset.label}: ${c.parsed.y} 🍺 total` : '' }
               }
             },
             scales: {
@@ -425,7 +400,6 @@
 
     // ── Boot ──────────────────────────────────────────────────
     initSeedData();
-    preloadImages();
     render();
   </script>
 </body>
