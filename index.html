@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eurotrip UCL 26 🍺</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -61,8 +62,16 @@
     .card:hover { border-color: #f5c518; }
 
     .card .avatar {
-      font-size: 3.5rem;
       margin-bottom: 8px;
+    }
+
+    .card .avatar img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #2e2e50;
+      background: #2e2e50;
     }
 
     .card .name {
@@ -155,6 +164,39 @@
       margin-top: 6px;
     }
 
+    /* Daily chart */
+    .chart-section {
+      margin-top: 28px;
+      width: 100%;
+      max-width: 700px;
+      background: #1a1a2e;
+      border: 2px solid #2e2e50;
+      border-radius: 20px;
+      padding: 24px 20px;
+    }
+
+    .chart-section h2 {
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: #aaa;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 220px;
+    }
+
+    .chart-empty {
+      text-align: center;
+      color: #444;
+      font-size: 0.85rem;
+      padding: 60px 0;
+    }
+
+    /* Log */
     .history {
       margin-top: 28px;
       width: 100%;
@@ -221,7 +263,9 @@
 
   <div class="cards">
     <div class="card" id="card-juanpa">
-      <div class="avatar">🧔</div>
+      <div class="avatar">
+        <img src="juanpa.jpg" alt="Juanpa" onerror="this.style.display='none'">
+      </div>
       <div class="name">Juanpa</div>
       <div class="counter-display" id="count-juanpa">0</div>
       <div class="btn-row">
@@ -232,7 +276,9 @@
     </div>
 
     <div class="card" id="card-mario">
-      <div class="avatar">🧑</div>
+      <div class="avatar">
+        <img src="mario.jpg" alt="Mario" onerror="this.style.display='none'">
+      </div>
       <div class="name">Mario</div>
       <div class="counter-display" id="count-mario">0</div>
       <div class="btn-row">
@@ -249,6 +295,14 @@
     <div class="total-beers">cervezas entre los dos</div>
   </div>
 
+  <div class="chart-section">
+    <h2>Histórico por Día</h2>
+    <div class="chart-container" id="chart-container">
+      <canvas id="daily-chart"></canvas>
+    </div>
+    <p class="chart-empty" id="chart-empty" style="display:none">Sin datos todavía — ¡empieza a contar!</p>
+  </div>
+
   <div class="history">
     <h2>Historial</h2>
     <ul class="log-list" id="log-list"></ul>
@@ -256,8 +310,10 @@
   </div>
 
   <script>
-    const DB_KEY = 'eurotrip_ucl26';
+    const DB_KEY  = 'eurotrip_ucl26';
     const LOG_KEY = 'eurotrip_ucl26_log';
+
+    let chartInstance = null;
 
     function loadDB() {
       const raw = localStorage.getItem(DB_KEY);
@@ -277,12 +333,110 @@
       localStorage.setItem(LOG_KEY, JSON.stringify(log));
     }
 
+    function todayISO() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function formatDay(iso) {
+      const [y, m, d] = iso.split('-');
+      return `${d}/${m}`;
+    }
+
+    function getDailyData() {
+      const log = loadLog();
+      const days = {};
+      log.forEach(entry => {
+        const date = entry.date || todayISO();
+        if (!days[date]) days[date] = { juanpa: 0, mario: 0 };
+        if (entry.delta > 0) days[date][entry.who] += entry.delta;
+      });
+      return days;
+    }
+
+    function renderChart() {
+      const days = getDailyData();
+      const labels = Object.keys(days).sort();
+
+      const emptyMsg = document.getElementById('chart-empty');
+      const container = document.getElementById('chart-container');
+
+      if (labels.length === 0) {
+        container.style.display = 'none';
+        emptyMsg.style.display = 'block';
+        return;
+      }
+
+      container.style.display = 'block';
+      emptyMsg.style.display = 'none';
+
+      const juanpaData = labels.map(d => days[d].juanpa);
+      const marioData  = labels.map(d => days[d].mario);
+
+      if (chartInstance) chartInstance.destroy();
+
+      const ctx = document.getElementById('daily-chart').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels.map(formatDay),
+          datasets: [
+            {
+              label: 'Juanpa',
+              data: juanpaData,
+              backgroundColor: '#f5c518cc',
+              borderColor: '#f5c518',
+              borderWidth: 1,
+              borderRadius: 6,
+            },
+            {
+              label: 'Mario',
+              data: marioData,
+              backgroundColor: '#4e9af1cc',
+              borderColor: '#4e9af1',
+              borderWidth: 1,
+              borderRadius: 6,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#aaa', font: { size: 12 } }
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} 🍺`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#888' },
+              grid: { color: '#1e1e3a' }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: '#888',
+                stepSize: 1,
+                precision: 0
+              },
+              grid: { color: '#1e1e3a' }
+            }
+          }
+        }
+      });
+    }
+
     function render() {
       const db = loadDB();
       document.getElementById('count-juanpa').textContent = db.juanpa;
-      document.getElementById('count-mario').textContent = db.mario;
+      document.getElementById('count-mario').textContent  = db.mario;
       document.getElementById('total').textContent = db.juanpa + db.mario;
       renderLog();
+      renderChart();
     }
 
     function renderLog() {
@@ -291,7 +445,9 @@
       el.innerHTML = '';
       [...log].reverse().forEach(entry => {
         const li = document.createElement('li');
-        li.innerHTML = `<span class="who">${capitalize(entry.who)}</span> <span>${entry.action} — ${entry.time}</span>`;
+        const label = entry.delta > 0 ? '+1 cerveza 🍺' : '-1 cerveza';
+        const dateStr = entry.date ? `${formatDay(entry.date)} ` : '';
+        li.innerHTML = `<span class="who">${capitalize(entry.who)}</span> <span>${label} — ${dateStr}${entry.time}</span>`;
         el.appendChild(li);
       });
     }
@@ -304,10 +460,11 @@
       const log = loadLog();
       log.push({
         who,
-        action: delta > 0 ? '+1 cerveza 🍺' : '-1 cerveza',
+        delta,
+        date: todayISO(),
         time: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })
       });
-      if (log.length > 100) log.shift();
+      if (log.length > 200) log.shift();
       saveLog(log);
 
       render();
